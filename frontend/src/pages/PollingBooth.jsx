@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import WebcamCapture from '../components/WebcamCapture';
 import { votingAPI, candidateAPI } from '../services/api';
 import { Fingerprint, CheckCircle2, ShieldAlert } from 'lucide-react';

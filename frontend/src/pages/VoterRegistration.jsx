@@ -4,7 +4,6 @@ import { voterAPI, electionAPI } from '../services/api';
 import { UserPlus, Save, CheckCircle } from 'lucide-react';
 
 const VoterRegistration = () => {
-    const [method, setMethod] = useState('face'); // face or manual (for test)
     const [voterData, setVoterData] = useState({
         voter_id: '',
         full_name: '',
