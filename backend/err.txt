@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\Users\RithinGude\Desktop\saj\votingproject\backend\test_validation.py", line 9, in <module>
+    response = AdminResponse.model_validate(admin)
+  File "C:\Users\RithinGude\Desktop\saj\votingproject\backend\venv\lib\site-packages\pydantic\main.py", line 716, in model_validate
+    return cls.__pydantic_validator__.validate_python(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for AdminResponse
+email
+  value is not a valid email address: The part after the @-sign is a special-use or reserved name that cannot be used with email. [type=value_error, input_value='admin@blockvote.local', input_type=str]
