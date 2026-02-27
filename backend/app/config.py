@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     LOCKOUT_DURATION_MINUTES: int = 30
 
     # CORS settings
-    CORS_ORIGINS: List[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: List[str] = ["*"]
 
     class Config:
         env_file = ".env"
