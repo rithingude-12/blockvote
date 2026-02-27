@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { electionAPI, candidateAPI } from '../services/api';
 import { Plus, ArrowLeft, Users, MapPin } from 'lucide-react';
 
@@ -14,11 +14,7 @@ const ConstituencyManager = ({ electionId, onBack }) => {
     const [newConstituency, setNewConstituency] = useState({ name: '', code: '' });
     const [newCandidate, setNewCandidate] = useState({ name: '', party: '', bio: '' });
 
-    useEffect(() => {
-        loadConstituencies();
-    }, [electionId]);
-
-    const loadConstituencies = async () => {
+    const loadConstituencies = useCallback(async () => {
         try {
             setLoading(true);
             const res = await electionAPI.getConstituencies(electionId);
@@ -30,7 +26,11 @@ const ConstituencyManager = ({ electionId, onBack }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [electionId]);
+
+    useEffect(() => {
+        loadConstituencies();
+    }, [loadConstituencies]);
 
     const handleCreateConstituency = async (e) => {
         e.preventDefault();
