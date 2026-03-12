@@ -40,7 +40,7 @@ const ConstituencyManager = ({ electionId, onBack }) => {
             setConstituencies([...constituencies, res.data]);
             setNewConstituency({ name: '', code: '' });
         } catch (err) {
-            alert('Failed to add constituency. Ensure election is not closed or active.');
+            alert('Failed to add constituency: ' + (err.response?.data?.detail || err.message));
         }
     };
 
@@ -70,7 +70,7 @@ const ConstituencyManager = ({ electionId, onBack }) => {
             setCandidates([...candidates, res.data]);
             setNewCandidate({ name: '', party: '', bio: '' });
         } catch (err) {
-            alert('Failed to add candidate. Ensure election is not closed or active.');
+            alert('Failed to add candidate: ' + (err.response?.data?.detail || err.message));
         }
     };
 

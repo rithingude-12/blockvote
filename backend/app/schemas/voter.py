@@ -6,8 +6,8 @@ class VoterBase(BaseModel):
     voter_id: str
     full_name: str
     address: Optional[str] = None
-    age: int
-    constituency_id: str
+    age: Optional[int] = None
+    constituency_id: Optional[str] = None
 
 class VoterUpdate(BaseModel):
     full_name: Optional[str] = None
@@ -23,7 +23,7 @@ class VoterRegisterRequest(VoterBase):
 
 class VoterResponse(VoterBase):
     id: str
-    blockchain_voter_id: str
+    blockchain_voter_id: Optional[str] = None
     has_voted: bool
     voted_at: Optional[datetime]
     created_at: datetime

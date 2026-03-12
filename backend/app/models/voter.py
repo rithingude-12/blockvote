@@ -20,7 +20,7 @@ class Voter(Base):
     full_name = Column(String(255), nullable=False)
     address = Column(Text)
     age = Column(Integer)
-    constituency_id = Column(String, ForeignKey("constituencies.id"))
+    constituency_id = Column(String, ForeignKey("constituencies.id", ondelete="SET NULL"))
     
     face_embedding_hash = Column(String(255))
     fingerprint_template_hash = Column(String(255))
@@ -45,7 +45,7 @@ class AuthAttempt(Base):
     __tablename__ = "auth_attempts"
 
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    voter_id = Column(String, ForeignKey("voters.id"))
+    voter_id = Column(String, ForeignKey("voters.id", ondelete="CASCADE"))
     session_id = Column(String(255))
     polling_station = Column(String(255))
     auth_method = Column(String)  # Enum AuthMethod
@@ -59,8 +59,8 @@ class VoteSubmission(Base):
     __tablename__ = "vote_submissions"
 
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    voter_id = Column(String, ForeignKey("voters.id"))
-    election_id = Column(String, ForeignKey("elections.id"))
+    voter_id = Column(String, ForeignKey("voters.id", ondelete="CASCADE"))
+    election_id = Column(String, ForeignKey("elections.id", ondelete="CASCADE"))
     session_id = Column(String(255))
     tx_hash = Column(String(255), unique=True)
     block_number = Column(Integer)
