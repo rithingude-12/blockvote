@@ -47,10 +47,16 @@ def create_default_admin():
         print("Creating default superadmin: username='superadmin', password='Admin@123456'")
         admin = Admin(
             username="superadmin",
-            email="admin@blockvote.local",
+            email="admin@blockvote.com",
             password_hash=get_password_hash("Admin@123456"),
             role=AdminRole.super_admin
         )
         db.add(admin)
         db.commit()
+    else:
+        # Fix existing superadmin email if it has the .local domain
+        admin = db.query(Admin).filter_by(username="superadmin").first()
+        if admin and admin.email.endswith(".local"):
+            admin.email = "admin@blockvote.com"
+            db.commit()
     db.close()
