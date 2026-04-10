@@ -5,9 +5,14 @@ from .database import engine, Base
 
 from .routers import auth, voters, voting, elections
 
-# Create tables in sqlite if they don't exist
-# In a real setup, alembic should be used.
-Base.metadata.create_all(bind=engine)
+try:
+    # Create tables in sqlite if they don't exist
+    # In a real setup, alembic should be used.
+    Base.metadata.create_all(bind=engine)
+    print("Database tables initialized successfully.")
+except Exception as e:
+    print(f"Database initialization deferred or failed: {e}")
+
 
 app = FastAPI(
     title="Blockchain-Based Voting System API",
