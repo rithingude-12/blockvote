@@ -59,8 +59,10 @@ def create_default_admin():
     
     # Ensure superadmin exists and has the correct password/status
     print(">>> Starting superadmin seeding check...")
+    db: Session = SessionLocal()
     try:
         admin = db.query(Admin).filter_by(username="superadmin").first()
+
         if not admin:
             print(">>> Action: Creating default superadmin: username='superadmin', password='Admin@123456'")
             admin = Admin(
