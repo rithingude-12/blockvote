@@ -28,9 +28,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/api/health")
+def health():
+    return {
+        "status": "healthy",
+        "version": "1.0.1-diagnostic",
+        "timestamp": "2026-04-10T10:48Z",
+        "message": "Authentication fix applied and force-reset active."
+    }
+
 @app.get("/")
 def root():
-    return {"message": "Welcome to the Blockchain-Based Voting System API - Active"}
+    return {"message": "Welcome to the Blockchain-Based Voting System API - Active", "health_check": "/api/health"}
+
 
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
@@ -48,24 +58,31 @@ def create_default_admin():
     from .middleware.auth import get_password_hash
     
     # Ensure superadmin exists and has the correct password/status
-    admin = db.query(Admin).filter_by(username="superadmin").first()
-    if not admin:
-        print("Creating default superadmin: username='superadmin', password='Admin@123456'")
-        admin = Admin(
-            username="superadmin",
-            email="admin@blockvote.com",
-            password_hash=get_password_hash("Admin@123456"),
-            role=AdminRole.super_admin,
-            is_active=True
-        )
-        db.add(admin)
-    else:
-        print("Forcing superadmin password reset and active status...")
-        admin.password_hash = get_password_hash("Admin@123456")
-        admin.is_active = True
-        if admin.email.endswith(".local"):
-            admin.email = "admin@blockvote.com"
-    
-    db.commit()
-    db.close()
+    print(">>> Starting superadmin seeding check...")
+    try:
+        admin = db.query(Admin).filter_by(username="superadmin").first()
+        if not admin:
+            print(">>> Action: Creating default superadmin: username='superadmin', password='Admin@123456'")
+            admin = Admin(
+                username="superadmin",
+                email="admin@blockvote.com",
+                password_hash=get_password_hash("Admin@123456"),
+                role=AdminRole.super_admin,
+                is_active=True
+            )
+            db.add(admin)
+        else:
+            print(">>> Action: Forcing superadmin password reset and active status...")
+            admin.password_hash = get_password_hash("Admin@123456")
+            admin.is_active = True
+            if admin.email.endswith(".local"):
+                admin.email = "admin@blockvote.com"
+        
+        db.commit()
+        print(">>> Superadmin seeding/reset COMPLETED.")
+    except Exception as e:
+        print(f">>> CRITICAL: Superadmin seeding FAILED: {e}")
+    finally:
+        db.close()
+
 
